@@ -1,1 +1,5 @@
-# rust-http-simple
+To run
+```
+cargo build --profile lto
+./target/lto/rust-http-simple
+```
