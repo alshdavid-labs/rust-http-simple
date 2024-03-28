@@ -38,7 +38,7 @@ async fn main_async() {
 fn main() {
   tokio::runtime::Builder::new_multi_thread()
     .worker_threads(num_cpus::get())
-    // .worker_threads(threads as usize)
+    // .worker_threads(4)
     .enable_all()
     .build()
     .unwrap()
