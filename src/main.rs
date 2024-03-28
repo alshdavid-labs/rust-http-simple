@@ -10,12 +10,12 @@ use rocket::Config;
 
 #[get("/")]
 fn index_get() -> String {
-    "Hello, world!".to_string()
+    return "Hello, world!".to_string();
 }
 
 #[post("/", data = "<body>")]
 fn index_post(body: String) -> String {
-    body
+    return body;
 }
 
 #[launch]
