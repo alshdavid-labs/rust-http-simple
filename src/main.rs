@@ -6,7 +6,7 @@ use tokio::io::AsyncReadExt;
 
 async fn main_async() {
     let listener = TcpListener::bind("0.0.0.0:9000").await.unwrap();
-    println!("Listening for connections on port {}", 8080);
+    println!("Listening for connections on port {}", 9000);
 
     loop {
       let (mut socket, _) = listener.accept().await.unwrap();
