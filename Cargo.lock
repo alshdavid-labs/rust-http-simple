@@ -123,12 +123,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "num_cpu"
-version = "1.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c56891d2972c8e6ac2cff4985042313e11ecb2dbbae06d60195116ac20fd7cf"
-
-[[package]]
 name = "num_cpus"
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -208,7 +202,7 @@ name = "rust-http-simple"
 version = "0.1.0"
 dependencies = [
  "httparse",
- "num_cpu",
+ "num_cpus",
  "tokio",
 ]
 

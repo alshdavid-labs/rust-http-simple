@@ -1,32 +1,37 @@
-use std::collections::HashMap;
-use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{TcpListener, TcpStream};
-use std::thread;
+use tokio::net::TcpListener;
+
+use tokio::io::AsyncWriteExt;
+use tokio::io::AsyncReadExt;
+
 
 async fn main_async() {
-    let listener = TcpListener::bind("0.0.0.0:9000").unwrap();
+    let listener = TcpListener::bind("0.0.0.0:9000").await.unwrap();
     println!("Listening for connections on port {}", 8080);
 
-    for stream in listener.incoming() {
-        let mut stream = stream.unwrap();
+    loop {
+      let (mut socket, _) = listener.accept().await.unwrap();
 
-        let mut buffer = [0; 1024];
-        stream.read(&mut buffer).unwrap();
-
-        let mut headers = [httparse::EMPTY_HEADER; 64];
-        let mut request = httparse::Request::new(&mut headers);
-
-        let status = request.parse(buffer.as_slice()).unwrap().unwrap();
-        let body = &buffer[status..];
-        let contents = std::str::from_utf8(body).unwrap();
-
-        let status_line = "HTTP/1.1 200 OK";
-        let length = contents.len();
-
-        let response =
-            format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
-
-        stream.write_all(response.as_bytes()).unwrap();
+      tokio::spawn(async move {
+        loop {
+            let mut buffer = [0; 1024];
+            socket.read(&mut buffer).await.unwrap();
+      
+            let mut headers = [httparse::EMPTY_HEADER; 64];
+            let mut request = httparse::Request::new(&mut headers);
+      
+            let status = request.parse(buffer.as_slice()).unwrap().unwrap();
+            let body = &buffer[status..];
+            let contents = std::str::from_utf8(body).unwrap();
+      
+            let status_line = "HTTP/1.1 200 OK";
+            let length = contents.len();
+      
+            let response =
+                format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+      
+            socket.write_all(response.as_bytes()).await.unwrap();
+        }
+      });
     }
 }
 
